@@ -1,0 +1,19 @@
+{
+  "name": "getmoving.fitness",
+  "version": "0.0.1",
+  "homepage": "www.getmoving.fitness",
+  "description": "getmoving.fitness assets",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.0.3",
+    "jquery-ujs": "1.0.1",
+    "bootstrap": "~3.3.1"
+  }
+}
