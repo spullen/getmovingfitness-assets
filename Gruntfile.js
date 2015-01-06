@@ -2,12 +2,6 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
-    uglify: {
-      options: {
-        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
-      }
-    },
-
     js_src_path: 'js',
     js_build_path: "dist/js",
     css_src_path: "css",
@@ -60,6 +54,9 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      options: {
+        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+      },
       my_target: {
         files: {
           '<%= js_build_path %>/app.min.js': ['<%= js_build_path %>/app.js']
