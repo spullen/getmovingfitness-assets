@@ -3,34 +3,34 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
 
     js_src_path: 'js',
-    js_build_path: "dist/js",
-    css_src_path: "css",
-    css_build_path: "dist/css",
-    images_src_path: "images",
-    images_build_path: "dist/images",
-    fonts_build_path: "dist/fonts",
+    js_dist_path: 'dist/js',
 
-    clean: ["dist"],
+    css_src_path: 'css',
+    css_dist_path: 'dist/css',
+
+    images_src_path: 'images',
+    images_dist_path: 'dist/images',
+
+    fonts_dist_path: 'dist/fonts',
+
+    clean: ['dist'],
 
     copy: {
       main: {
         files: [
-          {expand: true, flatten: true, src: ['<%= images_src_path %>/*'], dest: '<%= images_build_path %>', filter: 'isFile'},
+          {expand: true, flatten: true, src: ['<%= images_src_path %>/*'], dest: '<%= images_dist_path %>', filter: 'isFile'},
           {
             expand: true, 
             flatten: true, 
             src: ['bower_components/bootstrap/dist/fonts/*'],
-            dest: '<%= fonts_build_path %>',
+            dest: '<%= fonts_dist_path %>',
             filter: 'isFile'
           }
         ]
-      }
+      },
     },
 
     concat: {
-      options:{
-        separator: ';'
-      },
       js: {
         src: [
           'bower_components/jquery/jquery.js',
@@ -40,7 +40,7 @@ module.exports = function(grunt) {
           'bower_components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js',
           '<%= js_src_path %>/application.js'
         ],
-        dest: '<%= js_build_path %>/app.js'
+        dest: '<%= js_dist_path %>/app.js'
       },
       css:{
         src: [
@@ -49,7 +49,7 @@ module.exports = function(grunt) {
           '<%= css_src_path %>/application.css',
           '<%= css_src_path %>/home.css'
         ],
-        dest: '<%= css_build_path %>/app.css'   
+        dest: '<%= css_dist_path %>/app.css'   
       }
     },
 
@@ -59,7 +59,7 @@ module.exports = function(grunt) {
       },
       my_target: {
         files: {
-          '<%= js_build_path %>/app.min.js': ['<%= js_build_path %>/app.js']
+          '<%= js_dist_path %>/app.min.js': ['<%= js_dist_path %>/app.js']
         }
       }
     },
@@ -68,11 +68,36 @@ module.exports = function(grunt) {
       target: {
         files: [{
           expand: true,
-          cwd: '<%= css_build_path %>',
+          cwd: '<%= css_dist_path %>',
           src: ['*.css', '!*.min.css'],
-          dest: '<%= css_build_path %>',
+          dest: '<%= css_dist_path %>',
           ext: '.min.css'
         }]
+      }
+    },
+
+    connect: {
+      server: {
+        options: {
+          port: 9000,
+          base: 'dist',
+          keepalive: true,
+          livereload: true
+        }
+      }
+    },
+
+    watch: {
+      scripts: {
+        files: [
+          '<%= js_src_path %>/**/*.js',
+          '<%= css_src_path %>/**/*.css',
+          '<%= images_src_path %>/**/*.*'
+        ],
+        tasks: ['build-dev'],
+        options: {
+          spawn: false,
+        },
       }
     }
   });
@@ -81,6 +106,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
-  grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-connect');
+
+  grunt.registerTask('default', ['build-dev', 'connect']);
+
+  grunt.registerTask('build-dev', ['clean', 'copy', 'concat']);
+  grunt.registerTask('build-prod', ['clean', 'copy', 'concat', 'uglify', 'cssmin']);
 };

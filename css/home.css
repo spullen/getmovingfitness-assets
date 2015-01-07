@@ -27,7 +27,7 @@
   100% { background: url('../images/cycling2.jpg'); }
 }
 
-#main-wrapper {
+#home-wrapper {
   height: 100vh;
   width: 100%;
   background: url('../images/running1.jpg') no-repeat center center fixed;
@@ -43,7 +43,7 @@
 }
 
 @media (max-width: 768px) {
-  #main-wrapper {
+  #home-wrapper {
     background: none;
     -webkit-animation: none;
     -moz-animation: none;
