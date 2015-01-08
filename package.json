@@ -1,6 +1,8 @@
 {
   "name": "getmoving.fitness",
   "version": "1.0.0",
+  "description": "Assets for getMoving.fitness",
+  "repository": "https://github.com:spullen/getmoving.fitness-assets",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "*",
@@ -11,7 +13,8 @@
     "grunt-contrib-sass": "^0.7.3",
     "grunt-contrib-uglify": "^0.7.0",
     "grunt-contrib-watch": "^0.6.1",
-    "grunt-serve": "^0.1.6"
+    "grunt-serve": "^0.1.6",
+    "grunt-text-replace": "^0.4.0"
   },
   "dependencies": {
     "maxmin": "^1.0.0"

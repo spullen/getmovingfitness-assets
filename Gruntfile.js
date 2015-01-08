@@ -6,6 +6,7 @@ module.exports = function(grunt) {
     js_dist_path: 'dist/js',
 
     css_src_path: 'css',
+    css_build_path: 'build/css',
     css_dist_path: 'dist/css',
 
     images_src_path: 'images',
@@ -25,9 +26,33 @@ module.exports = function(grunt) {
             src: ['bower_components/bootstrap/dist/fonts/*'],
             dest: '<%= fonts_dist_path %>',
             filter: 'isFile'
+          },
+          {expand: true, flatten: true, src: ['bower_components/bootstrap/dist/css/bootstrap.css.map'], dest: '<%= css_dist_path %>', filter: 'isFile'}
+        ]
+      },
+    },
+
+    replace: {
+      dev: {
+        src: ['<%= css_src_path %>/home.css'],
+        dest: '<%= css_build_path %>/home.css',
+        replacements: [
+          {
+            from: ':host',
+            to: 'http://localhost:9000'
           }
         ]
       },
+      prod: {
+        src: ['<%= css_src_path %>/home.css'],
+        dest: '<%= css_build_path %>/home.css',
+        replacements: [
+          {
+            from: ':host',
+            to: '//assets.getmoving.fitness'
+          }
+        ]
+      }
     },
 
     concat: {
@@ -44,10 +69,9 @@ module.exports = function(grunt) {
       },
       css:{
         src: [
-          'bower_components/bootstrap/dist/css/bootstrap.css',
           'bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css',
           '<%= css_src_path %>/application.css',
-          '<%= css_src_path %>/home.css'
+          '<%= css_build_path %>/home.css'
         ],
         dest: '<%= css_dist_path %>/app.css'   
       }
@@ -104,6 +128,7 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-text-replace');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -112,6 +137,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', ['build-dev', 'connect']);
 
-  grunt.registerTask('build-dev', ['clean', 'copy', 'concat']);
-  grunt.registerTask('build-prod', ['clean', 'copy', 'concat', 'uglify', 'cssmin']);
+  grunt.registerTask('build-dev', ['clean', 'copy', 'replace:dev', 'concat']);
+  grunt.registerTask('build-prod', ['clean', 'copy', 'replace:prod', 'concat', 'uglify', 'cssmin']);
 };
